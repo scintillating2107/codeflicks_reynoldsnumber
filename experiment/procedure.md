@@ -35,4 +35,4 @@
 
 9. **Reset for New Inputs:**
     To perform another trial, click the **red “Reset”** button, and repeat the above steps with different values.
-<img src="./images/WhatsApp Image 2025-05-31 at 22.43.22_3f46147d.jpg" alt="Reynolds Simulation" width="500">
+<img src="./images/WhatsApp Image 2025-05-31 at 22.43.22_3f46147d.jpg" alt="Reynolds Simulation" width="1000">
