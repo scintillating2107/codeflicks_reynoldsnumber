@@ -1,13 +1,189 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" data-theme="light">
 <head>
-	<!-- Add CSS at the head of HTML file -->
-    <link rel="stylesheet" href="./css/main.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluid Flow Simulator</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.4.4/math.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-		<!-- Your code goes here-->
+    <!-- Theme Switch -->
+    <div class="theme-switch-wrapper">
+        <label class="theme-switch" for="checkbox">
+            <input type="checkbox" id="checkbox" />
+            <div class="slider">
+                <div class="slider-icons">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+                </div>
+            </div>
+        </label>
+    </div>
 
-	<!-- Add JS at the bottom of HTML file --> 
-        <script src="./js/main.js"></script>
+    <!-- Audio Assistance Button -->
+    <button id="audio-assist" class="audio-assist-btn" title="Audio Assistance">
+        <i class="fas fa-volume-up"></i>
+    </button>
+
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="welcome-container">
+        <div class="welcome-card">
+            <h1 class="welcome-title">Aim of the Experiment</h1>
+            <p class="welcome-subtitle">Determine the Reynolds number and study different types of flow.</p>
+            
+            <div class="water-animation">
+                <div class="wave wave1"></div>
+                <div class="wave wave2"></div>
+                <div class="wave wave3"></div>
+                <div class="wave wave4"></div>
+            </div>
+
+            <button id="start-btn" class="start-button">Start Simulation</button>
+        </div>
+    </div>
+
+    <!-- Main Simulation Content (Initially Hidden) -->
+    <div id="simulation-content" class="container hidden">
+        <div class="simulation-container">
+            <div style="text-align: center; grid-column: 1 / -1; margin-bottom: 2rem;">
+                <h1 style="color: var(--text-color); font-size: 2.2rem; font-weight: 600; margin: 0; padding: 0;">Simulation Setup</h1>
+            </div>
+            <div class="input-section">
+                <h2>Input Parameters</h2>
+                <div class="input-group">
+                    <label for="diameter">Pipe Diameter (0.1-1.0 m):</label>
+                    <input type="number" id="diameter" step="0.01" min="0.01" max="1.00" value="0.05">
+                </div>
+                <div class="input-group">
+                    <label for="velocity">Flow Velocity (0.1-10 m/s):</label>
+                    <input type="number" id="velocity" step="0.1" min="0.1" max="10.0" value="1.5">
+                </div>
+                <div class="input-group">
+                    <label for="fluid-type">Fluid Type:</label>
+                    <select id="fluid-type">
+                        <option value="water">Water</option>
+                        <option value="oil">Oil</option>
+                        <option value="air">Air</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                </div>
+                <div id="custom-properties" class="hidden">
+                    <div class="input-group">
+                        <label for="density">Density (800-1200 kg/m³):</label>
+                        <input type="number" id="density" step="1" min="800" max="1200" value="1000">
+                    </div>
+                    <div class="input-group">
+                        <label for="viscosity">Viscosity (0.0008-0.0015 Pa·s):</label>
+                        <input type="number" id="viscosity" step="0.0001" min="0.0008" max="0.0015" value="0.001">
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button id="calculate-btn">Calculate Reynolds Number</button>
+                    <button id="reset-btn" class="reset-button">Reset</button>
+                </div>
+            </div>
+
+            <div class="results-section">
+                <h2>Results</h2>
+                <div id="reynolds-number" class="result-display">
+                    <span class="label">Reynolds Number:</span>
+                    <span class="value">-</span>
+                </div>
+                <div id="flow-type" class="result-display">
+                    <span class="label">Flow Type:</span>
+                    <span class="value">-</span>
+                </div>
+                <div id="record-count">Recorded Data Points: 0</div>
+                <div class="button-group">
+                    <button id="record-btn" disabled>Record Data</button>
+                    <button id="export-btn">Export to PDF</button>
+                </div>
+            </div>
+
+            <div class="visualization-section">
+                <div style="text-align: center;">
+                    <h2>Flow Visualization</h2>
+                </div>
+                <div id="flow-animation"></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        // Theme switcher
+        const toggleSwitch = document.querySelector('#checkbox');
+        const html = document.querySelector('html');
+        
+        // Check for saved theme preference
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme) {
+            html.setAttribute('data-theme', currentTheme);
+            if (currentTheme === 'dark') {
+                toggleSwitch.checked = true;
+            }
+        }
+
+        // Theme switch handler
+        function switchTheme(e) {
+            if (e.target.checked) {
+                html.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        toggleSwitch.addEventListener('change', switchTheme);
+
+        // Audio Assistance
+        const audioAssistBtn = document.getElementById('audio-assist');
+        const assistanceText = `Hey, We are performing experiment to determine Reynolds number and study different kind of flows. 
+            To start the simulation you need to scroll a bit and select the input parameters.
+            First select the Pipe Diameter in meters,
+            then select flow velocity in meter per second,
+            and lastly select the type of fluid you want.
+            You can also choose a custom fluid for which you have to enter density and viscosity of that fluid.
+            Then press calculate reynolds number.
+            You can see the Reynolds number and the flow type of that fluid.
+            If you scroll a bit you will also see a flow visualization graph based on Flow type of fluid`;
+
+        let isPlaying = false;
+        let currentSpeech = null;
+
+        audioAssistBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                // Stop the audio
+                window.speechSynthesis.cancel();
+                audioAssistBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                isPlaying = false;
+            } else {
+                // Start new speech
+                currentSpeech = new SpeechSynthesisUtterance(assistanceText);
+                currentSpeech.rate = 0.9;
+                currentSpeech.pitch = 1;
+                currentSpeech.volume = 1;
+
+                // Change icon to indicate playing state
+                audioAssistBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                isPlaying = true;
+
+                // Handle speech end
+                currentSpeech.onend = () => {
+                    audioAssistBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                    isPlaying = false;
+                };
+
+                // Start speaking
+                window.speechSynthesis.speak(currentSpeech);
+            }
+        });
+    </script>
 </body>
 </html>
