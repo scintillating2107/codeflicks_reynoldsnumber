@@ -1,0 +1,660 @@
+/* Theme Variables */
+:root {
+    /* Light Theme (default) */
+    --primary-color: #2196F3;
+    --secondary-color: #1976D2;
+    --success-color: #4CAF50;
+    --warning-color: #FFC107;
+    --danger-color: #F44336;
+    --text-color: #333;
+    --background-color: #f5f5f5;
+    --card-background: #ffffff;
+    --input-border: #ddd;
+    --input-background: #ffffff;
+    --formula-background: #f8f9fa;
+    --formula-text: #2c3e50;
+    --result-background: #f8f9fa;
+    --result-text: #2c3e50;
+}
+
+[data-theme="dark"] {
+    /* Dark Theme */
+    --primary-color: #64B5F6;
+    --secondary-color: #42A5F5;
+    --success-color: #81C784;
+    --warning-color: #FFD54F;
+    --danger-color: #E57373;
+    --text-color: #E0E0E0;
+    --background-color: #121212;
+    --card-background: #1E1E1E;
+    --input-border: #333;
+    --input-background: #2D2D2D;
+    --formula-background: #2D2D2D;
+    --formula-text: #E0E0E0;
+    --result-background: #2D2D2D;
+    --result-text: #E0E0E0;
+}
+
+/* Theme Toggle Styles */
+.theme-switch-wrapper {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    z-index: 100;
+}
+
+.theme-switch {
+    display: inline-block;
+    height: 34px;
+    position: relative;
+    width: 60px;
+}
+
+.theme-switch input {
+    display: none;
+}
+
+.slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    background-color: white;
+    bottom: 4px;
+    content: "";
+    height: 26px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 26px;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--primary-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider-icons {
+    color: var(--text-color);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    transition: all 0.3s ease;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+h1 {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 1.2rem;
+}
+
+.theory-section {
+    background-color: var(--card-background);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    color: var(--text-color);
+}
+
+.equation {
+    font-size: 1.5rem;
+    text-align: center;
+    margin: 1rem 0;
+    padding: 1.5rem;
+    background-color: var(--formula-background);
+    color: var(--formula-text);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.parameters {
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+.parameters ul {
+    list-style-type: none;
+    padding-left: 1rem;
+}
+
+.parameters li {
+    margin: 0.8rem 0;
+    color: var(--text-color);
+}
+
+.simulation-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.input-section, .results-section {
+    background-color: var(--card-background);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: var(--text-color);
+    height: fit-content;
+}
+
+.visualization-section {
+    grid-column: 1 / -1;
+    background-color: var(--card-background);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: var(--text-color);
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-section h2, .results-section h2 {
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+}
+
+.input-group label {
+    color: var(--text-color);
+}
+
+input, select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--input-border);
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: var(--input-background);
+    color: var(--text-color);
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: var(--secondary-color);
+}
+
+.hidden {
+    display: none !important;
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.result-display {
+    margin: 1rem 0;
+    padding: 1.5rem;
+    background-color: var(--result-background);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.result-display .label {
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.result-display .value {
+    margin-left: 0.5rem;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+
+#flow-animation {
+    width: 100%;
+    height: 300px;
+    background-color: var(--card-background);
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+#reynolds-scale {
+    width: 100%;
+    height: 80px;
+    background-color: var(--card-background);
+    border-radius: 4px;
+}
+
+/* Flow type indicators */
+.laminar {
+    color: var(--success-color);
+}
+
+.transitional {
+    color: var(--warning-color);
+}
+
+.turbulent {
+    color: var(--danger-color);
+}
+
+/* Welcome Screen Styles */
+.welcome-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    background-color: var(--background-color);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+}
+
+.welcome-card {
+    background-color: var(--card-background);
+    border-radius: 12px;
+    padding: 3rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+.welcome-title {
+    color: var(--text-color);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    position: relative;
+    z-index: 2;
+}
+
+.welcome-subtitle {
+    color: var(--text-color);
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+/* Water Animation */
+.water-animation {
+    position: relative;
+    height: 200px;
+    background-color: rgba(33, 150, 243, 0.1);
+    margin: 2rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.wave {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    bottom: -100%;
+    left: -50%;
+    border-radius: 40%;
+    background: rgba(33, 150, 243, 0.2);
+}
+
+.wave1 {
+    animation: wave 8s linear infinite;
+}
+
+.wave2 {
+    animation: wave 10s linear infinite;
+    opacity: 0.3;
+}
+
+.wave3 {
+    animation: wave 12s linear infinite;
+    opacity: 0.2;
+}
+
+.wave4 {
+    animation: wave 14s linear infinite;
+    opacity: 0.1;
+}
+
+@keyframes wave {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.start-button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem 3rem;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 2;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.start-button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: white;
+    text-decoration: none;
+}
+
+.apparatus-diagram {
+    margin: 3rem 0;
+    padding: 2rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.pipe-container {
+    position: relative;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pipe {
+    width: 80%;
+    height: 40px;
+    background: linear-gradient(to bottom, #a8d5ff 0%, #2196F3 100%);
+    border: 2px solid #1976D2;
+    border-radius: 4px;
+    position: relative;
+}
+
+.measurement-points {
+    position: absolute;
+    top: -20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 40px;
+}
+
+.point {
+    width: 12px;
+    height: 12px;
+    background-color: #1976D2;
+    border-radius: 50%;
+    position: relative;
+}
+
+.point::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 2px;
+    height: 20px;
+    background-color: #1976D2;
+    transform: translateX(-50%);
+}
+
+/* Theory Section */
+.theory-section h2 {
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.theory-section p {
+    color: var(--text-color);
+}
+
+/* Audio Assistance Button */
+.audio-assist-btn {
+    position: fixed;
+    top: 20px;
+    right: 100px;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.5rem;
+    width: 70px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    transition: all 0.3s ease;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.audio-assist-btn:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.audio-assist-btn i {
+    font-size: 1rem;
+}
+
+.audio-assist-btn.speaking {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.button-group {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+#record-btn, #export-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+#record-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#record-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+#export-btn {
+    background-color: #2196F3;
+    color: white;
+}
+
+#record-btn:hover:not(:disabled),
+#export-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+#record-count {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: var(--text-color);
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: var(--card-background);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.data-table th,
+.data-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--input-border);
+}
+
+.data-table th {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 500;
+}
+
+.data-table tr:nth-child(even) {
+    background-color: var(--result-background);
+}
+
+.data-table tr:hover {
+    background-color: var(--formula-background);
+}
+
+.data-table td.laminar {
+    color: var(--success-color);
+    font-weight: 500;
+}
+
+.data-table td.transitional {
+    color: var(--warning-color);
+    font-weight: 500;
+}
+
+.data-table td.turbulent {
+    color: var(--danger-color);
+    font-weight: 500;
+}
+
+#data-table-container {
+    margin-top: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.button-container button {
+    flex: 1;
+}
+
+.reset-button {
+    background-color: var(--danger-color) !important;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.reset-button:hover {
+    background-color: #d32f2f !important;
+    transform: translateY(-2px);
+}
+
+/* Update Plotly container styles */
+.js-plotly-plot {
+    width: 100% !important;
+}
+
+.js-plotly-plot .plotly {
+    width: 100% !important;
+}
+
+.plot-container.plotly {
+    width: 100% !important;
+} 
