@@ -89,56 +89,56 @@
 
 const myQuestions = [
   {
-    question: "1. What does the Reynolds number primarily determine in a fluid flow system?",
+    question: "1. When the Reynolds number is between 2000 and 4000, the flow is considered:",
     answers: {
-      a: "Fluid temperature",
-      b: "Flow resistance",
-      c: "Type of flow (laminar, transitional, turbulent)",
-      d: "Density of the fluid"
+      a: "Laminar",
+      b: "Turbulent",
+      c: "Transitional",
+      d: "Chaotic"
     },
     correctAnswer: "c"
   },
 
   {
-    question: "2. Which of the following factors does NOT affect the Reynolds number?",
+    question: "2. Reynolds number is a dimensionless quantity because:",
     answers: {
-      a: "Viscosity of the fluid",
-      b: "Density of the fluid",
-      c: "Gravitational acceleration",
-      d: "Velocity of the fluid"
-    },
-    correctAnswer: "c"
-  },
-
-  {
-    question: "3. If the Reynolds number is less than 2000, the flow is considered to be:",
-    answers: {
-      a: "Transitional",
-      b: "Laminar",
-      c: "Turbulent",
-      d: "Supersonic"
-    },
-    correctAnswer: "b"
-  },
-
-  {
-    question: "4. In the formula Re = (ρ × v × D) / μ, what does D represent?",
-    answers: {
-      a: "Diameter of the pipe or tube",
-      b: "Density of the fluid",
-      c: "Distance traveled by the fluid",
-      d: "Depth of the fluid"
+      a: "Its units cancel out during calculation",
+      b: "It has no physical meaning",
+      c: "It is only used for gases",
+      d: "It represents time"
     },
     correctAnswer: "a"
   },
 
   {
-    question: "5. Which of the following is an example of turbulent flow?",
+    question: "3. What happens to Reynolds number if the velocity of the fluid is doubled (keeping all other parameters constant)?",
     answers: {
-      a: "Blood flow in capillaries",
-      b: "Flow of oil through a narrow pipe",
-      c: "Smoke rising from a candle",
-      d: "Water flowing rapidly through a large river"
+      a: "It becomes half",
+      b: "It remains unchanged",
+      c: "It becomes double",
+      d: "It becomes four times"
+    },
+    correctAnswer: "c"
+  },
+
+  {
+    question: "4. Which of the following flow conditions is most likely to cause vibration and noise in pipelines?",
+    answers: {
+      a: "Laminar flow",
+      b: "Turbulent flow",
+      c: "Transitional flow",
+      d: "Static flow"
+    },
+    correctAnswer: "b"
+  },
+
+  {
+    question: "5. Which parameter change is most effective in converting turbulent flow into laminar flow?",
+    answers: {
+      a: "Increasing velocity",
+      b: "Decreasing fluid density",
+      c: "Increasing pipe diameter",
+      d: "Increasing fluid viscosity"
     },
     correctAnswer: "d"
   }
