@@ -2,37 +2,88 @@
   "version": 2.0,
   "questions": [
     {
-      "question": "This is a Sample Question 1?",
+      "question": "What does the Reynolds number primarily determine in a fluid flow system?",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
+        "a": "Fluid temperature",
+        "b": "Flow resistance",
+        "c": "Type of flow (laminar, transitional, turbulent)",
+        "d": "Density of the fluid"
       },
       "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
+        "a": "Temperature affects fluid properties but not directly the flow type.",
+        "b": "Resistance is a consequence, not a primary classification criterion.",
+        "c": "Reynolds number helps predict whether flow is laminar, transitional, or turbulent. <a href='https://en.wikipedia.org/wiki/Reynolds_number'>Learn more</a>",
+        "d": "Density is a component in calculating Reynolds number, not what it determines."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Which of the following factors does NOT affect the Reynolds number?",
+      "answers": {
+        "a": "Viscosity of the fluid",
+        "b": "Density of the fluid",
+        "c": "Gravitational acceleration",
+        "d": "Velocity of the fluid"
+      },
+      "explanations": {
+        "a": "Viscosity appears in the denominator of the Reynolds number formula.",
+        "b": "Density is in the numerator and affects the value.",
+        "c": "Gravity does not directly appear in the Reynolds number equation. <a href='https://www.engineeringtoolbox.com/reynolds-number-d_237.html'>See source</a>",
+        "d": "Velocity is a key variable in the calculation."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "If the Reynolds number is less than 2000, the flow is considered to be:",
+      "answers": {
+        "a": "Transitional",
+        "b": "Laminar",
+        "c": "Turbulent",
+        "d": "Supersonic"
+      },
+      "explanations": {
+        "a": "Transitional flow generally occurs between Re 2000 to 4000.",
+        "b": "Laminar flow occurs at Re < 2000. <a href='https://en.wikipedia.org/wiki/Laminar_flow'>Read more</a>",
+        "c": "Turbulent flow occurs at high Re > 4000.",
+        "d": "Supersonic refers to speed, not fluid flow types."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "In the formula Re = (ρ × v × D) / μ, what does D represent?",
+      "answers": {
+        "a": "Diameter of the pipe or tube",
+        "b": "Density of the fluid",
+        "c": "Distance traveled by the fluid",
+        "d": "Depth of the fluid"
+      },
+      "explanations": {
+        "a": "D stands for diameter and is critical in determining the flow cross-section. <a href='https://www.britannica.com/science/Reynolds-number'>Source</a>",
+        "b": "Density is ρ, not D.",
+        "c": "Distance traveled is not used in this formula.",
+        "d": "Depth is unrelated to D in this context."
       },
       "correctAnswer": "a",
       "difficulty": "beginner"
     },
     {
-      "question": "This is a Sample Question 2?",
+      "question": "Which of the following is an example of turbulent flow?",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
+        "a": "Blood flow in capillaries",
+        "b": "Flow of oil through a narrow pipe",
+        "c": "Smoke rising from a candle",
+        "d": "Water flowing rapidly through a large river"
       },
       "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
+        "a": "Capillaries usually exhibit laminar flow.",
+        "b": "Slow oil flow in narrow pipes is typically laminar.",
+        "c": "Smoke movement is chaotic but driven by convection, not classic fluid flow.",
+        "d": "Large rivers with high velocity usually have turbulent flow. <a href='https://www.sciencedirect.com/topics/earth-and-planetary-sciences/turbulent-flow'>More info</a>"
       },
-      "correctAnswer": "c",
+      "correctAnswer": "d",
       "difficulty": "beginner"
     }
   ]
