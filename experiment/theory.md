@@ -25,3 +25,4 @@ Laminar Flow (Re < 2000): Fluid particles move in parallel layers with no disrup
 Transitional Flow (2000 < Re < 4000): The flow is unstable and fluctuates between laminar and turbulent.
 
 Turbulent Flow (Re > 4000): Fluid motion is chaotic and mixed, with eddies and vortices.
+<img src="./images/WhatsApp Image 2025-05-31 at 23.31.08_7f9ff316.jpg" alt="des" width="1000">
