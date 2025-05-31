@@ -35,4 +35,4 @@
 
 9. **Reset for New Inputs:**
     To perform another trial, click the **red “Reset”** button, and repeat the above steps with different values.
-
+![Reynolds Simulation]([https://raw.githubusercontent.com/username/repo-name/branch-name/reynolds_simulation.png](https://github.com/scintillating2107/codeflicks_reynoldsnumber/blob/main/experiment/images/WhatsApp%20Image%202025-05-31%20at%2022.43.22_3f46147d.jpg))
