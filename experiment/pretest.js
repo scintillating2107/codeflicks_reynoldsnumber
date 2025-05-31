@@ -87,83 +87,64 @@
 
 /////////////// Write the MCQ below in the exactly same described format ///////////////
 
-
-  const myQuestions = [
-    {
-      question: "1. जिस सिद्धांत पर विशिष्ट घूर्णन के प्रयोग का आधार है वह है:",  ///// Write the question inside double quotes
-      answers: {
-        a: "ध्रुवीकृत प्रकाश ऑप्टिकली सक्रिय माध्यम से गुजरते समय दो घटकों में विभाजित हो जाता है",                  ///// Write the option 1 inside double quotes
-        b: "ध्रुवीकृत प्रकाश ऑप्टिकली सक्रिय माध्यम से गुजरते समय घुमता है",                  ///// Write the option 2 inside double quotes
-        c: "ध्रुवीकृत प्रकाश पानी से गुजरते समय विचलित हो जाता है",                  ///// Write the option 3 inside double quotes
-        d: "इनमें से कोई नहीं"                   ///// Write the option 4 inside double quotes
-      },
-      correctAnswer: "b"                ///// Write the correct option inside double quotes
+const myQuestions = [
+  {
+    question: "1. What does the Reynolds number primarily determine in a fluid flow system?",
+    answers: {
+      a: "Fluid temperature",
+      b: "Flow resistance",
+      c: "Type of flow (laminar, transitional, turbulent)",
+      d: "Density of the fluid"
     },
+    correctAnswer: "c"
+  },
 
-    {
-     question: "2. शुगर घोल की सांद्रता बढ़ाने पर ध्रुवीकृत प्रकाश का घुमाव कोण:",  ///// Write the question inside double quotes
-      answers: {
-        a: "बढ़ता है",                  ///// Write the option 1 inside double quotes
-        b: " घटता है",                  ///// Write the option 2 inside double quotes
-        c: "अपरिवर्तित रहता है",                  ///// Write the option 3 inside double quotes
-        d: "इनमें से कोई नहीं"                   ///// Write the option 4 inside double quotes
-      },
-      correctAnswer: "a"                ///// Write the correct option inside double quotes
-    },     
-    {
-      question: "3. किसी भी घोल का विशिष्ट घूर्णन किस पर निर्भर करता है:",  ///// Write the question inside double quotes
-       answers: {
-         a: "सांद्रता",                  ///// Write the option 1 inside double quotes
-         b: "नलिका की लंबाई",                  ///// Write the option 2 inside double quotes
-         c: "तापमान",                  ///// Write the option 3 inside double quotes
-         d: "इनमें से कोई नहीं"                   ///// Write the option 4 inside double quotes
-       },
-       correctAnswer: "c"                ///// Write the correct option inside double quotes
-     }, 
-     {
-      question: "4. यदि नलिका की लंबाई बढ़ाई जाए तो किसी भी घोल का विशिष्ट घूर्णन:",  ///// Write the question inside double quotes
-       answers: {
-         a: "बढ़ता है",                  ///// Write the option 1 inside double quotes
-         b: "घटता है",                  ///// Write the option 2 inside double quotes
-         c: "अपरिवर्तित रहता है",                  ///// Write the option 3 inside double quotes
-         d: "इनमें से कोई नहीं"                   ///// Write the option 4 inside double quotes
-       },
-       correctAnswer: "c"                ///// Write the correct option inside double quotes
-     },                              ///// To add more questions, copy the section below 
-    									                  ///// this line
-
-
-    /* To add more MCQ's, copy the below section, starting from open curly braces ( { )
-        till closing curly braces comma ( }, )
-
-        and paste it below the curly braces comma ( below correct answer }, ) of above 
-        question
-
-    Copy below section
-
-    {
-      question: "This is question n?",
-      answers: {
-        a: "Option 1",
-        b: "Option 2",
-        c: "Option 3",
-        d: "Option 4"
-      },
-      correctAnswer: "c"
+  {
+    question: "2. Which of the following factors does NOT affect the Reynolds number?",
+    answers: {
+      a: "Viscosity of the fluid",
+      b: "Density of the fluid",
+      c: "Gravitational acceleration",
+      d: "Velocity of the fluid"
     },
+    correctAnswer: "c"
+  },
 
-    Copy above section
+  {
+    question: "3. If the Reynolds number is less than 2000, the flow is considered to be:",
+    answers: {
+      a: "Transitional",
+      b: "Laminar",
+      c: "Turbulent",
+      d: "Supersonic"
+    },
+    correctAnswer: "b"
+  },
 
-    */
+  {
+    question: "4. In the formula Re = (ρ × v × D) / μ, what does D represent?",
+    answers: {
+      a: "Diameter of the pipe or tube",
+      b: "Density of the fluid",
+      c: "Distance traveled by the fluid",
+      d: "Depth of the fluid"
+    },
+    correctAnswer: "a"
+  },
 
+  {
+    question: "5. Which of the following is an example of turbulent flow?",
+    answers: {
+      a: "Blood flow in capillaries",
+      b: "Flow of oil through a narrow pipe",
+      c: "Smoke rising from a candle",
+      d: "Water flowing rapidly through a large river"
+    },
+    correctAnswer: "d"
+  }
+];
 
-
-
-  ];
-
-
-
-
+  
 /////////////////////////////////////////////////////////////////////////////
 
 /////////////////////// Do not modify the below code ////////////////////////
