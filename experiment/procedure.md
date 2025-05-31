@@ -17,16 +17,6 @@
    Press the **blue button** labeled `Calculate Reynolds Number`.
    This will compute the Reynolds number based on the formula:
 
-   $$
-   Re = \frac{{\rho \cdot u \cdot D}}{\mu} = \frac{uD}{\nu}
-   $$
-
-   where:
-
-   * $u$ = velocity
-   * $D$ = diameter
-   * $\nu$ = kinematic viscosity
-
 5. **Observe Results:**
    The calculated **Reynolds number** and **Flow Type** (Laminar, Transitional, or Turbulent) will appear in the **Results** box on the right.
 
