@@ -1,1 +1,1 @@
-### Aim of the experiment
+### The aim of this experiment is to determine the Reynolds number for fluid flow through a circular pipe and to analyze the corresponding flow regime. By observing the dye patterns and calculating the Reynolds number using measured flow rates, fluid properties, and pipe dimensions, the experiment aims to classify the flow as laminar, transitional, or turbulent. This helps in understanding the influence of flow parameters on fluid motion and the practical application of Reynolds number in fluid mechanics.
