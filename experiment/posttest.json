@@ -2,37 +2,88 @@
   "version": 2.0,
   "questions": [
     {
-      "question": "This is a Sample Question 1?",
+      "question": "When the Reynolds number is between 2000 and 4000, the flow is considered:",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
+        "a": "Laminar",
+        "b": "Turbulent",
+        "c": "Transitional",
+        "d": "Chaotic"
       },
       "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
+        "a": "Laminar flow occurs at Re < 2000.",
+        "b": "Turbulent flow occurs at Re > 4000.",
+        "c": "Re between 2000 and 4000 indicates transitional flow. <a href='https://en.wikipedia.org/wiki/Reynolds_number'>Read more</a>",
+        "d": "Chaotic flow is not a standard category."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Reynolds number is a dimensionless quantity because:",
+      "answers": {
+        "a": "Its units cancel out during calculation",
+        "b": "It has no physical meaning",
+        "c": "It is only used for gases",
+        "d": "It represents time"
+      },
+      "explanations": {
+        "a": "All units cancel in the formula, making it dimensionless. <a href='https://www.engineeringtoolbox.com/reynolds-number-d_237.html'>Source</a>",
+        "b": "It does have physical meaning—it classifies flow type.",
+        "c": "It is used for both liquids and gases.",
+        "d": "It does not represent time."
       },
       "correctAnswer": "a",
       "difficulty": "beginner"
     },
     {
-      "question": "This is a Sample Question 2?",
+      "question": "What happens to Reynolds number if the velocity of the fluid is doubled (keeping all other parameters constant)?",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
+        "a": "It becomes half",
+        "b": "It remains unchanged",
+        "c": "It becomes double",
+        "d": "It becomes four times"
       },
       "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
+        "a": "Re is directly proportional to velocity.",
+        "b": "Velocity increase causes Re to change.",
+        "c": "Doubling velocity doubles Re. <a href='https://www.britannica.com/science/Reynolds-number'>Explanation</a>",
+        "d": "It would quadruple only if velocity were squared in the formula, which it is not."
       },
       "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Which of the following flow conditions is most likely to cause vibration and noise in pipelines?",
+      "answers": {
+        "a": "Laminar flow",
+        "b": "Turbulent flow",
+        "c": "Transitional flow",
+        "d": "Static flow"
+      },
+      "explanations": {
+        "a": "Laminar flow is smooth and silent.",
+        "b": "Turbulent flow is chaotic and can cause noise and vibration. <a href='https://www.sciencedirect.com/topics/earth-and-planetary-sciences/turbulent-flow'>Source</a>",
+        "c": "Transition is less likely but may introduce minor disturbances.",
+        "d": "Static flow means no motion, hence no vibration."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Which parameter change is most effective in converting turbulent flow into laminar flow?",
+      "answers": {
+        "a": "Increasing velocity",
+        "b": "Decreasing fluid density",
+        "c": "Increasing pipe diameter",
+        "d": "Increasing fluid viscosity"
+      },
+      "explanations": {
+        "a": "Higher velocity increases Re, leading to more turbulence.",
+        "b": "Density has a limited effect compared to viscosity.",
+        "c": "Increasing diameter may increase Re due to larger D.",
+        "d": "Higher viscosity lowers Re and promotes laminar flow. <a href='https://www.engineeringtoolbox.com/reynolds-number-d_237.html'>Learn more</a>"
+      },
+      "correctAnswer": "d",
       "difficulty": "beginner"
     }
   ]
