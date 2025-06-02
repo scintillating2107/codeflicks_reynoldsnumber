@@ -17,31 +17,38 @@ const fluidProperties = {
 // Global array to store recorded data
 const recordedData = [];
 
-// DOM Elements
-const fluidTypeSelect = document.getElementById('fluid-type');
-const customProperties = document.getElementById('custom-properties');
-const calculateBtn = document.getElementById('calculate-btn');
-const recordBtn = document.getElementById('record-btn');
-const exportBtn = document.getElementById('export-btn');
-const resetBtn = document.getElementById('reset-btn');
-const reynoldsNumber = document.getElementById('reynolds-number');
-const flowType = document.getElementById('flow-type');
-const flowAnimation = document.getElementById('flow-animation');
+// Global variables for visualization mode
+let currentMode = '2d';
+let currentReynolds = null;
 
-// Welcome Screen Elements
-const welcomeScreen = document.getElementById('welcome-screen');
-const simulationContent = document.getElementById('simulation-content');
-const startButton = document.getElementById('start-btn');
+// DOM Elements - will be assigned after DOM loads
+let fluidTypeSelect, customProperties, calculateBtn, recordBtn, exportBtn, resetBtn;
+let reynoldsNumber, flowType, flowAnimation;
+let welcomeScreen, simulationContent, startButton;
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Initializing simulator...'); // Debug log
     
-    // Get all required elements
-    const recordBtn = document.getElementById('record-btn');
+    // Get all required DOM elements after DOM is loaded
+    fluidTypeSelect = document.getElementById('fluid-type');
+    customProperties = document.getElementById('custom-properties');
+    calculateBtn = document.getElementById('calculate-btn');
+    recordBtn = document.getElementById('record-btn');
+    exportBtn = document.getElementById('export-btn');
+    resetBtn = document.getElementById('reset-btn');
+    reynoldsNumber = document.getElementById('reynolds-number');
+    flowType = document.getElementById('flow-type');
+    flowAnimation = document.getElementById('flow-animation');
     
-    if (!recordBtn) {
-        console.error('Record button not found!');
+    // Welcome Screen Elements
+    welcomeScreen = document.getElementById('welcome-screen');
+    simulationContent = document.getElementById('simulation-content');
+    startButton = document.getElementById('start-btn');
+    
+    // Check if all elements exist
+    if (!recordBtn || !startButton || !welcomeScreen || !simulationContent) {
+        console.error('Required elements not found!');
         return;
     }
 
@@ -51,6 +58,16 @@ document.addEventListener('DOMContentLoaded', () => {
     recordBtn.addEventListener('click', recordCurrentData);
     exportBtn.addEventListener('click', exportToPDF);
     resetBtn.addEventListener('click', resetSimulation);
+    
+    // Add start button event listener
+    startButton.addEventListener('click', () => {
+        console.log('Start button clicked!'); // Debug log
+        welcomeScreen.classList.add('hidden');
+        simulationContent.classList.remove('hidden');
+    });
+    
+    // Add mode toggle event listeners
+    setupModeToggle();
     
     // Initially disable record button
     recordBtn.disabled = true;
@@ -269,12 +286,6 @@ observer.observe(document.documentElement, {
     attributeFilter: ['data-theme']
 });
 
-// Start button click handler
-startButton.addEventListener('click', () => {
-    welcomeScreen.classList.add('hidden');
-    simulationContent.classList.remove('hidden');
-});
-
 function handleFluidTypeChange() {
     const selectedFluid = fluidTypeSelect.value;
     customProperties.classList.toggle('hidden', selectedFluid !== 'custom');
@@ -314,9 +325,31 @@ function calculateReynoldsNumber() {
     const Re = (density * velocity * diameter) / viscosity;
     console.log('Reynolds number calculated:', Re); // Debug log
     
+    // Store Reynolds number globally
+    currentReynolds = Re;
+    
     // Update results
     displayResults(Re);
+    
+    // Show visualization and default to 2D waveform
+    showFlowVisualization();
+    
+    // Reset to 2D mode
+    currentMode = '2d';
+    const modeToggles = document.querySelectorAll('.mode-toggle');
+    modeToggles.forEach(toggle => {
+        toggle.classList.toggle('active', toggle.dataset.mode === '2d');
+    });
+    
+    // Show 2D view by default
+    const waveformView = document.getElementById('waveform-view');
+    const threeDView = document.getElementById('3d-view');
+    waveformView.classList.add('active');
+    threeDView.classList.remove('active');
+    
+    // Initialize 2D visualization
     updateVisualization(Re);
+    updateCurrentPattern(Re);
     
     // Double-check that the button is enabled
     setTimeout(() => {
@@ -326,6 +359,28 @@ function calculateReynoldsNumber() {
             recordBtn.disabled = false;
         }
     }, 100);
+}
+
+// Function to show the 3D visualization after calculation
+function showFlowVisualization() {
+    const placeholder = document.getElementById('visualization-placeholder');
+    const flowVisualization = document.getElementById('flow-visualization');
+    
+    if (placeholder && flowVisualization) {
+        // Hide placeholder with fade out
+        placeholder.style.transition = 'opacity 0.3s ease-out';
+        placeholder.style.opacity = '0';
+        
+        setTimeout(() => {
+            placeholder.style.display = 'none';
+            flowVisualization.classList.remove('hidden');
+            
+            // Trigger reflow for animation
+            setTimeout(() => {
+                flowVisualization.style.opacity = '1';
+            }, 50);
+        }, 300);
+    }
 }
 
 function displayResults(Re) {
@@ -524,24 +579,470 @@ function exportToPDF() {
 function resetSimulation() {
     // Show confirmation dialog
     if (confirm('Are you sure you want to reset? This will clear all recorded data.')) {
-        // Disable record button before reload
-        recordBtn.disabled = true;
-        location.reload();
+        // Hide visualization and show placeholder
+        hideFlowVisualization();
+        
+        // Reset visualization mode variables
+        currentMode = '2d';
+        currentReynolds = null;
+        
+        // Reset all form values
+        document.getElementById('diameter').value = '0.05';
+        document.getElementById('velocity').value = '1.5';
+        document.getElementById('fluid-type').value = 'water';
+        
+        // Reset results
+        reynoldsNumber.querySelector('.value').textContent = '-';
+        flowType.querySelector('.value').textContent = '-';
+        flowType.querySelector('.value').className = 'value';
+        
+        // Reset current pattern display
+        const patternElement = document.getElementById('current-pattern');
+        if (patternElement) {
+            patternElement.textContent = '-';
+            patternElement.className = '';
+        }
+        
+        // Clear recorded data
+        recordedData.length = 0;
+        updateRecordCount();
+        
+        // Remove data table if it exists
+        const tableContainer = document.getElementById('data-table-container');
+        if (tableContainer) {
+            tableContainer.remove();
+        }
+        
+        // Disable record button
+        document.getElementById('record-btn').disabled = true;
+        
+        // Handle fluid type change to reset custom properties
+        handleFluidTypeChange();
+        
+        // Clear any existing animation
+        if (window.animationFrameId) {
+            cancelAnimationFrame(window.animationFrameId);
+        }
+        
+        // Reinitialize Plotly
+        initializePlotly();
     }
 }
 
-// Initialize the simulator
-function initializeSimulator() {
-    handleFluidTypeChange();
-    initializePlotly();
+// Function to hide the 3D visualization and show placeholder
+function hideFlowVisualization() {
+    const placeholder = document.getElementById('visualization-placeholder');
+    const flowVisualization = document.getElementById('flow-visualization');
     
-    // Add event listeners for new buttons
-    document.getElementById('record-btn').addEventListener('click', recordCurrentData);
-    document.getElementById('export-btn').addEventListener('click', exportToPDF);
-    
-    // Initially disable record button
-    document.getElementById('record-btn').disabled = true;
+    if (placeholder && flowVisualization) {
+        // Hide 3D visualization
+        flowVisualization.classList.add('hidden');
+        
+        // Show placeholder with fade in
+        placeholder.style.display = 'block';
+        placeholder.style.opacity = '0';
+        
+        setTimeout(() => {
+            placeholder.style.transition = 'opacity 0.3s ease-in';
+            placeholder.style.opacity = '1';
+        }, 50);
+    }
 }
 
-// Call initialize function when document is ready
-document.addEventListener('DOMContentLoaded', initializeSimulator); 
+// Setup mode toggle functionality
+function setupModeToggle() {
+    const modeToggles = document.querySelectorAll('.mode-toggle');
+    
+    modeToggles.forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            const mode = toggle.dataset.mode;
+            switchVisualizationMode(mode);
+        });
+    });
+    
+    // Setup 2D animation controls
+    const pause2DBtn = document.getElementById('pause-2d-btn');
+    const restart2DBtn = document.getElementById('restart-2d-btn');
+    
+    if (pause2DBtn) {
+        pause2DBtn.addEventListener('click', toggle2DAnimation);
+    }
+    
+    if (restart2DBtn) {
+        restart2DBtn.addEventListener('click', restart2DAnimation);
+    }
+}
+
+// Switch between visualization modes
+function switchVisualizationMode(mode) {
+    currentMode = mode;
+    
+    // Update toggle buttons
+    const modeToggles = document.querySelectorAll('.mode-toggle');
+    modeToggles.forEach(toggle => {
+        toggle.classList.toggle('active', toggle.dataset.mode === mode);
+    });
+    
+    // Update view containers
+    const waveformView = document.getElementById('waveform-view');
+    const threeDView = document.getElementById('3d-view');
+    
+    if (mode === '2d') {
+        waveformView.classList.add('active');
+        threeDView.classList.remove('active');
+        
+        // Initialize or update 2D visualization
+        if (currentReynolds !== null) {
+            updateVisualization(currentReynolds);
+            updateCurrentPattern(currentReynolds);
+        }
+    } else if (mode === '3d') {
+        waveformView.classList.remove('active');
+        threeDView.classList.add('active');
+        
+        // Initialize and update 3D visualization
+        if (currentReynolds !== null) {
+            // Initialize 3D visualization if not already done
+            if (typeof initialize3DVisualization === 'function') {
+                initialize3DVisualization();
+            }
+            
+            // Update 3D flow profile
+            if (typeof update3DFlowProfile === 'function') {
+                setTimeout(() => {
+                    update3DFlowProfile();
+                }, 100); // Small delay to ensure container is visible
+            } else if (typeof updateFlowProfile === 'function') {
+                setTimeout(() => {
+                    updateFlowProfile();
+                }, 100);
+            }
+        }
+    }
+}
+
+// Toggle 2D animation
+function toggle2DAnimation() {
+    const pauseBtn = document.getElementById('pause-2d-btn');
+    
+    if (window.animationFrameId) {
+        cancelAnimationFrame(window.animationFrameId);
+        window.animationFrameId = null;
+        pauseBtn.innerHTML = '<i class="fas fa-play"></i> Resume';
+    } else {
+        if (currentReynolds !== null) {
+            updateVisualization(currentReynolds);
+        }
+        pauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+    }
+}
+
+// Restart 2D animation
+function restart2DAnimation() {
+    if (currentReynolds !== null) {
+        updateVisualization(currentReynolds);
+        const pauseBtn = document.getElementById('pause-2d-btn');
+        pauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+    }
+}
+
+// Update current pattern display
+function updateCurrentPattern(Re) {
+    const patternElement = document.getElementById('current-pattern');
+    if (patternElement) {
+        let pattern = 'Laminar';
+        if (Re > 4000) pattern = 'Turbulent';
+        else if (Re > 2000) pattern = 'Transitional';
+        
+        patternElement.textContent = pattern;
+        patternElement.className = pattern.toLowerCase();
+    }
+}
+
+// ===== 3D VISUALIZATION FUNCTIONALITY =====
+// Flow Visualization Configuration
+const config = {
+    animate: true,
+    rotation: false,
+    currentView: '3d',
+    speed: 1,
+    flowData: {
+        velocity: 0,
+        section: 'Center'
+    }
+};
+
+// Initialize the 3D visualization
+function initialize3DVisualization() {
+    const flowAnimation3D = document.getElementById('flow-animation-3d');
+    
+    if (!flowAnimation3D) {
+        console.log('3D container not found');
+        return;
+    }
+    
+    // Create 3D visualization using Plotly
+    const trace = {
+        type: 'surface',
+        colorscale: 'Viridis',
+        showscale: false,
+        lighting: {
+            ambient: 0.8,
+            diffuse: 0.9,
+            fresnel: 0.8,
+            specular: 0.7,
+            roughness: 0.4
+        }
+    };
+
+    // Generate flow profile data
+    update3DFlowProfile();
+
+    // Set up event listeners for 3D controls
+    setup3DControls();
+    setup3DViewButtons();
+}
+
+// Update the 3D flow profile based on current parameters
+function update3DFlowProfile() {
+    const flowAnimation3D = document.getElementById('flow-animation-3d');
+    
+    if (!flowAnimation3D) {
+        console.log('3D container not found for update');
+        return;
+    }
+    
+    const diameter = parseFloat(document.getElementById('diameter').value) || 0.05;
+    const velocity = parseFloat(document.getElementById('velocity').value) || 1.5;
+    
+    // Generate data points for the flow profile
+    const points = 50;
+    const x = Array.from({length: points}, (_, i) => (i - points/2) * (diameter/points));
+    const y = Array.from({length: points}, (_, i) => (i - points/2) * (diameter/points));
+    const z = [];
+
+    // Calculate flow profile (parabolic for laminar flow)
+    for (let i = 0; i < points; i++) {
+        z[i] = [];
+        for (let j = 0; j < points; j++) {
+            const r = Math.sqrt(x[i]**2 + y[j]**2);
+            const maxRadius = diameter / 2;
+            if (r <= maxRadius) {
+                z[i][j] = velocity * (1 - (r/maxRadius)**2);
+            } else {
+                z[i][j] = 0; // Outside pipe boundary
+            }
+        }
+    }
+
+    // Create streamlines for better visualization
+    const streamlines = create3DStreamlines(x, y, z, diameter, velocity);
+
+    // Combine surface and streamlines
+    const data = [
+        {
+            type: 'surface',
+            x: x,
+            y: y,
+            z: z,
+            colorscale: [
+                [0, 'rgb(68,1,84)'],     // Dark purple
+                [0.25, 'rgb(59,82,139)'], // Blue
+                [0.5, 'rgb(33,144,140)'], // Teal
+                [0.75, 'rgb(93,201,99)'], // Green
+                [1, 'rgb(253,231,37)']    // Yellow
+            ],
+            showscale: true,
+            colorbar: {
+                title: 'Velocity (m/s)',
+                titleside: 'right'
+            },
+            opacity: 0.8,
+            lighting: {
+                ambient: 0.8,
+                diffuse: 0.9,
+                fresnel: 0.8,
+                specular: 0.7,
+                roughness: 0.4
+            }
+        },
+        ...streamlines
+    ];
+
+    const layout = {
+        scene: {
+            camera: get3DViewCamera(),
+            xaxis: {title: 'Width (m)', range: [-diameter/2, diameter/2]},
+            yaxis: {title: 'Height (m)', range: [-diameter/2, diameter/2]},
+            zaxis: {title: 'Velocity (m/s)', range: [0, velocity]},
+            bgcolor: 'rgba(0,0,0,0)',
+            aspectmode: 'cube'
+        },
+        margin: {l: 0, r: 0, t: 0, b: 0},
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)'
+    };
+
+    Plotly.newPlot('flow-animation-3d', data, layout, {
+        responsive: true,
+        displayModeBar: false
+    });
+
+    // Update flow information
+    update3DFlowInfo(velocity);
+}
+
+// Create 3D streamlines for flow visualization
+function create3DStreamlines(x, y, z, diameter, velocity) {
+    const streamlines = [];
+    const numStreamlines = 8;
+    const maxRadius = diameter / 2;
+    
+    for (let i = 0; i < numStreamlines; i++) {
+        const angle = (i / numStreamlines) * 2 * Math.PI;
+        const radius = maxRadius * 0.7; // Stay within pipe
+        const xStart = radius * Math.cos(angle);
+        const yStart = radius * Math.sin(angle);
+        
+        // Create streamline points
+        const streamX = [];
+        const streamY = [];
+        const streamZ = [];
+        
+        for (let t = 0; t < 20; t++) {
+            streamX.push(xStart);
+            streamY.push(yStart);
+            
+            // Calculate velocity at this position
+            const r = Math.sqrt(xStart**2 + yStart**2);
+            const velAtPoint = velocity * (1 - (r/maxRadius)**2);
+            streamZ.push(velAtPoint + t * 0.01);
+        }
+        
+        streamlines.push({
+            type: 'scatter3d',
+            x: streamX,
+            y: streamY,
+            z: streamZ,
+            mode: 'lines',
+            line: {
+                color: 'rgba(255,255,255,0.8)',
+                width: 4
+            },
+            showlegend: false
+        });
+    }
+    
+    return streamlines;
+}
+
+// Set up 3D control buttons and sliders
+function setup3DControls() {
+    const pauseBtn = document.getElementById('pause-btn');
+    const rotateBtn = document.getElementById('rotate-btn');
+    const speedSlider = document.getElementById('animation-speed');
+    const graph = document.getElementById('flow-animation-3d');
+
+    if (pauseBtn) {
+        pauseBtn.addEventListener('click', () => {
+            config.animate = !config.animate;
+            pauseBtn.innerHTML = config.animate ? 
+                '<i class="fas fa-pause"></i> Pause' : 
+                '<i class="fas fa-play"></i> Play';
+            if (config.animate) {
+                update3DFlowProfile();
+            }
+        });
+    }
+
+    if (rotateBtn) {
+        rotateBtn.addEventListener('click', () => {
+            config.rotation = !config.rotation;
+            if (graph) {
+                graph.classList.toggle('rotating');
+            }
+            rotateBtn.innerHTML = config.rotation ? 
+                '<i class="fas fa-sync-alt fa-spin"></i> Stop Rotation' : 
+                '<i class="fas fa-sync-alt"></i> Rotate View';
+        });
+    }
+
+    if (speedSlider) {
+        speedSlider.addEventListener('input', (e) => {
+            config.speed = parseFloat(e.target.value);
+            if (config.animate) {
+                update3DFlowProfile();
+            }
+        });
+    }
+}
+
+// Set up 3D view control buttons
+function setup3DViewButtons() {
+    const viewBtns = document.querySelectorAll('.view-btn');
+    
+    viewBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            viewBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            config.currentView = btn.dataset.view;
+            update3DFlowProfile();
+        });
+    });
+}
+
+// Get camera position based on current view
+function get3DViewCamera() {
+    switch(config.currentView) {
+        case '3d':
+            return {
+                eye: {x: 1.5, y: 1.5, z: 1.5},
+                center: {x: 0, y: 0, z: 0},
+                up: {x: 0, y: 0, z: 1}
+            };
+        case 'top':
+            return {
+                eye: {x: 0, y: 0, z: 2},
+                center: {x: 0, y: 0, z: 0},
+                up: {x: 0, y: 1, z: 0}
+            };
+        case 'side':
+            return {
+                eye: {x: 2, y: 0, z: 0},
+                center: {x: 0, y: 0, z: 0},
+                up: {x: 0, y: 0, z: 1}
+            };
+        default:
+            return {
+                eye: {x: 1.5, y: 1.5, z: 1.5},
+                center: {x: 0, y: 0, z: 0},
+                up: {x: 0, y: 0, z: 1}
+            };
+    }
+}
+
+// Update 3D flow information display
+function update3DFlowInfo(velocity) {
+    const currentVelocityElement = document.getElementById('current-velocity');
+    const currentSectionElement = document.getElementById('current-section');
+    
+    if (currentVelocityElement) {
+        currentVelocityElement.textContent = `${velocity.toFixed(2)} m/s`;
+    }
+    
+    if (currentSectionElement) {
+        const section = Math.abs(velocity) < 1 ? 'Near Wall' : 
+                       Math.abs(velocity) < 2 ? 'Intermediate' : 'Center';
+        currentSectionElement.textContent = section;
+    }
+}
+
+// Legacy function name for compatibility
+function updateFlowProfile() {
+    update3DFlowProfile();
+}
+
+// Initialize 3D visualization when called
+function initializeVisualization() {
+    initialize3DVisualization();
+} 
