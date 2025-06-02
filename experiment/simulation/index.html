@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fluid Flow Simulator</title>
-    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.4.4/math.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -26,11 +26,6 @@
         </label>
     </div>
 
-    <!-- Audio Assistance Button -->
-    <button id="audio-assist" class="audio-assist-btn" title="Audio Assistance">
-        <i class="fas fa-volume-up"></i>
-    </button>
-
     <!-- Welcome Screen -->
     <div id="welcome-screen" class="welcome-container">
         <div class="welcome-card">
@@ -48,24 +43,33 @@
         </div>
     </div>
 
-    <!-- Main Simulation Content (Initially Hidden) -->
+    <!-- Main Simulation Content -->
     <div id="simulation-content" class="container hidden">
         <div class="simulation-container">
-            <div style="text-align: center; grid-column: 1 / -1; margin-bottom: 2rem;">
-                <h1 style="color: var(--text-color); font-size: 2.2rem; font-weight: 600; margin: 0; padding: 0;">Simulation Setup</h1>
-            </div>
             <div class="input-section">
+                <div class="section-header">
+                    <i class="fas fa-sliders-h"></i>
                 <h2>Input Parameters</h2>
+                </div>
                 <div class="input-group">
-                    <label for="diameter">Pipe Diameter (0.1-1.0 m):</label>
+                    <label for="diameter">
+                        <i class="fas fa-arrows-alt-h"></i>
+                        Pipe Diameter (0.1-1.0 m):
+                    </label>
                     <input type="number" id="diameter" step="0.01" min="0.01" max="1.00" value="0.05">
                 </div>
                 <div class="input-group">
-                    <label for="velocity">Flow Velocity (0.1-10 m/s):</label>
+                    <label for="velocity">
+                        <i class="fas fa-tachometer-alt"></i>
+                        Flow Velocity (0.1-10 m/s):
+                    </label>
                     <input type="number" id="velocity" step="0.1" min="0.1" max="10.0" value="1.5">
                 </div>
                 <div class="input-group">
-                    <label for="fluid-type">Fluid Type:</label>
+                    <label for="fluid-type">
+                        <i class="fas fa-water"></i>
+                        Fluid Type:
+                    </label>
                     <select id="fluid-type">
                         <option value="water">Water</option>
                         <option value="oil">Oil</option>
@@ -75,22 +79,37 @@
                 </div>
                 <div id="custom-properties" class="hidden">
                     <div class="input-group">
-                        <label for="density">Density (800-1200 kg/m³):</label>
+                        <label for="density">
+                            <i class="fas fa-weight"></i>
+                            Density (800-1200 kg/m³):
+                        </label>
                         <input type="number" id="density" step="1" min="800" max="1200" value="1000">
                     </div>
                     <div class="input-group">
-                        <label for="viscosity">Viscosity (0.0008-0.0015 Pa·s):</label>
+                        <label for="viscosity">
+                            <i class="fas fa-oil-can"></i>
+                            Viscosity (0.0008-0.0015 Pa·s):
+                        </label>
                         <input type="number" id="viscosity" step="0.0001" min="0.0008" max="0.0015" value="0.001">
                     </div>
                 </div>
                 <div class="button-container">
-                    <button id="calculate-btn">Calculate Reynolds Number</button>
-                    <button id="reset-btn" class="reset-button">Reset</button>
+                    <button id="calculate-btn">
+                        <i class="fas fa-calculator"></i>
+                        Calculate Reynolds Number
+                    </button>
+                    <button id="reset-btn" class="reset-button">
+                        <i class="fas fa-undo"></i>
+                        Reset
+                    </button>
                 </div>
             </div>
 
             <div class="results-section">
+                <div class="section-header">
+                    <i class="fas fa-chart-bar"></i>
                 <h2>Results</h2>
+                </div>
                 <div id="reynolds-number" class="result-display">
                     <span class="label">Reynolds Number:</span>
                     <span class="value">-</span>
@@ -99,22 +118,164 @@
                     <span class="label">Flow Type:</span>
                     <span class="value">-</span>
                 </div>
+                <div class="data-records">
                 <div id="record-count">Recorded Data Points: 0</div>
                 <div class="button-group">
-                    <button id="record-btn" disabled>Record Data</button>
-                    <button id="export-btn">Export to PDF</button>
+                        <button id="record-btn" disabled>
+                            <i class="fas fa-save"></i>
+                            Record Data
+                        </button>
+                        <button id="export-btn">
+                            <i class="fas fa-file-export"></i>
+                            Export to PDF
+                        </button>
+                    </div>
                 </div>
             </div>
 
             <div class="visualization-section">
-                <div style="text-align: center;">
+                <div class="section-title">
+                    <i class="fas fa-chart-line"></i>
                     <h2>Flow Visualization</h2>
+                    <span class="help-text" data-tooltip="Real-time visualization of fluid flow patterns">
+                        <i class="fas fa-question-circle"></i>
+                    </span>
                 </div>
-                <div id="flow-animation"></div>
+                
+                <!-- Placeholder when no results -->
+                <div id="visualization-placeholder" class="visualization-placeholder">
+                    <div class="placeholder-content">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Flow Visualization</h3>
+                        <p>Calculate Reynolds number to see the flow visualization</p>
+                        <div class="placeholder-animation">
+                            <div class="flow-icon">
+                                <i class="fas fa-water"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visualization Content (hidden initially) -->
+                <div id="flow-visualization" class="hidden">
+                    <!-- View Mode Selector -->
+                    <div class="view-mode-selector">
+                        <button class="mode-toggle active" data-mode="2d">
+                            <i class="fas fa-chart-area"></i>
+                            2D Waveform
+                        </button>
+                        <button class="mode-toggle" data-mode="3d">
+                            <i class="fas fa-cube"></i>
+                            3D View
+                        </button>
+                    </div>
+
+                    <!-- 2D Waveform View (default) -->
+                    <div id="waveform-view" class="view-container active">
+                        <div class="visualization-container">
+                            <div class="graph-container">
+                                <div id="flow-animation" class="graph-2d"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- 2D Waveform Tools -->
+                        <div class="tools-panel">
+                            <div class="tools-header">
+                                <i class="fas fa-chart-area"></i>
+                                <h3>2D Waveform Tools</h3>
+                            </div>
+                            <div class="tools-grid">
+                                <div class="tool-group">
+                                    <div class="tool-label">Flow Pattern</div>
+                                    <div class="pattern-info">
+                                        <div class="pattern-item">
+                                            <i class="fas fa-info-circle"></i>
+                                            <span>Current Pattern:</span>
+                                            <strong id="current-pattern">-</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tool-group">
+                                    <div class="tool-label">Animation Control</div>
+                                    <div class="animation-controls">
+                                        <button id="pause-2d-btn" class="control-btn">
+                                            <i class="fas fa-pause"></i>
+                                            Pause
+                                        </button>
+                                        <button id="restart-2d-btn" class="control-btn">
+                                            <i class="fas fa-play"></i>
+                                            Restart
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3D View -->
+                    <div id="3d-view" class="view-container">
+                        <div class="visualization-container">
+                            <div class="graph-container">
+                                <div id="flow-animation-3d" class="graph-3d"></div>
+                                <div class="graph-overlay">
+                                    <div class="axis-label x-axis">Distance (m)</div>
+                                    <div class="axis-label y-axis">Velocity (m/s)</div>
+                                    <div class="axis-label z-axis">Flow Profile</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3D Tools Panel -->
+                        <div class="tools-panel">
+                            <div class="tools-header">
+                                <i class="fas fa-cube"></i>
+                                <h3>3D View Tools</h3>
+                            </div>
+                            
+                            <div class="tools-grid">
+                                <!-- View Controls -->
+                                <div class="tool-group">
+                                    <div class="tool-label">View Angle</div>
+                                    <div class="view-controls">
+                                        <button class="view-btn active" data-view="3d">
+                                            <i class="fas fa-cube"></i>
+                                            3D
+                                        </button>
+                                        <button class="view-btn" data-view="top">
+                                            <i class="fas fa-arrow-up"></i>
+                                            Top
+                                        </button>
+                                        <button class="view-btn" data-view="side">
+                                            <i class="fas fa-arrow-right"></i>
+                                            Side
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Flow Information -->
+                                <div class="tool-group">
+                                    <div class="tool-label">Flow Status</div>
+                                    <div class="flow-info">
+                                        <div class="flow-parameter">
+                                            <i class="fas fa-tachometer-alt"></i>
+                                            <span>Velocity:</span>
+                                            <strong id="current-velocity">0 m/s</strong>
+                                        </div>
+                                        <div class="flow-parameter">
+                                            <i class="fas fa-arrows-alt-h"></i>
+                                            <span>Section:</span>
+                                            <strong id="current-section">Center</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <script src="./js/script.js"></script>
+    <script src="script.js"></script>
     <script>
         // Theme switcher
         const toggleSwitch = document.querySelector('#checkbox');
@@ -141,49 +302,6 @@
         }
 
         toggleSwitch.addEventListener('change', switchTheme);
-
-        // Audio Assistance
-        const audioAssistBtn = document.getElementById('audio-assist');
-        const assistanceText = `Hey, We are performing experiment to determine Reynolds number and study different kind of flows. 
-            To start the simulation you need to scroll a bit and select the input parameters.
-            First select the Pipe Diameter in meters,
-            then select flow velocity in meter per second,
-            and lastly select the type of fluid you want.
-            You can also choose a custom fluid for which you have to enter density and viscosity of that fluid.
-            Then press calculate reynolds number.
-            You can see the Reynolds number and the flow type of that fluid.
-            If you scroll a bit you will also see a flow visualization graph based on Flow type of fluid`;
-
-        let isPlaying = false;
-        let currentSpeech = null;
-
-        audioAssistBtn.addEventListener('click', () => {
-            if (isPlaying) {
-                // Stop the audio
-                window.speechSynthesis.cancel();
-                audioAssistBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-                isPlaying = false;
-            } else {
-                // Start new speech
-                currentSpeech = new SpeechSynthesisUtterance(assistanceText);
-                currentSpeech.rate = 0.9;
-                currentSpeech.pitch = 1;
-                currentSpeech.volume = 1;
-
-                // Change icon to indicate playing state
-                audioAssistBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                isPlaying = true;
-
-                // Handle speech end
-                currentSpeech.onend = () => {
-                    audioAssistBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-                    isPlaying = false;
-                };
-
-                // Start speaking
-                window.speechSynthesis.speak(currentSpeech);
-            }
-        });
     </script>
 </body>
 </html>
