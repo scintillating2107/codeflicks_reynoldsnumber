@@ -29,7 +29,7 @@
     <!-- Welcome Screen -->
     <div id="welcome-screen" class="welcome-container">
         <div class="welcome-card">
-            <h1 class="welcome-title">Aim of the Experiment</h1>
+            <h2 class="welcome-title">Aim of the Experiment</h2>
             <p class="welcome-subtitle">Determine the Reynolds number and study different types of flow.</p>
             
             <div class="water-animation">
@@ -40,6 +40,21 @@
             </div>
 
             <button id="start-btn" class="start-button">Start Simulation</button>
+        </div>
+    </div>
+
+    <!-- Voice Assistant -->
+    <div id="voice-assistant" class="voice-assistant">
+        <button id="voice-toggle" class="voice-toggle" aria-label="Toggle Voice Assistant">
+            <i class="fas fa-volume-up"></i>
+        </button>
+        <div class="voice-status">
+            <span class="voice-text">Voice Assistant Ready</span>
+            <div class="voice-wave">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </div>
 
@@ -302,6 +317,246 @@
         }
 
         toggleSwitch.addEventListener('change', switchTheme);
+
+        // Voice Assistant Implementation
+        class VoiceAssistant {
+            constructor() {
+                this.synth = window.speechSynthesis;
+                this.voice = null;
+                this.isSpeaking = false;
+                this.isEnabled = true;
+                this.voiceToggle = document.getElementById('voice-toggle');
+                this.voiceStatus = document.querySelector('.voice-status');
+                this.voiceText = document.querySelector('.voice-text');
+                this.voiceWave = document.querySelector('.voice-wave');
+                
+                // Track interactions
+                this.interactions = {
+                    started: false,
+                    calculated: false,
+                    viewed2D: false,
+                    viewed3D: false,
+                    recorded: false,
+                    exported: false
+                };
+                
+                this.init();
+            }
+
+            async init() {
+                // Wait for voices to be loaded
+                if (speechSynthesis.onvoiceschanged !== undefined) {
+                    speechSynthesis.onvoiceschanged = () => this.setupVoice();
+                }
+                
+                this.setupVoice();
+                this.setupEventListeners();
+                
+                // Auto-start with welcome message
+                setTimeout(() => {
+                    this.speak("Welcome to the Fluid Flow Simulator. I'll guide you through the experiment to determine the Reynolds number and study different types of flow. You can view the flow patterns in both 2D waveform and 3D visualization modes.");
+                }, 1000);
+            }
+
+            setupVoice() {
+                const voices = this.synth.getVoices();
+                // Find a male English voice
+                this.voice = voices.find(voice => 
+                    voice.lang.includes('en') && 
+                    voice.name.toLowerCase().includes('male')
+                ) || voices[0]; // Fallback to first available voice
+            }
+
+            setupEventListeners() {
+                this.voiceToggle.addEventListener('click', () => this.toggleVoice());
+                
+                // Welcome message when simulation starts
+                document.getElementById('start-btn').addEventListener('click', () => {
+                    this.interactions.started = true;
+                    setTimeout(() => this.speak("Let's begin by setting up the input parameters."), 500);
+                    this.checkAllInteractionsComplete();
+                });
+
+                // Guide through input parameters
+                const inputs = document.querySelectorAll('.input-group input, .input-group select');
+                inputs.forEach(input => {
+                    input.addEventListener('focus', () => {
+                        const label = input.previousElementSibling.textContent.trim();
+                        this.speak(`Adjust the ${label.toLowerCase()}`);
+                    });
+                });
+
+                // Guide through calculation
+                document.getElementById('calculate-btn').addEventListener('click', () => {
+                    this.interactions.calculated = true;
+                    this.speak("Calculating Reynolds number and flow type. Please wait.");
+                    this.checkAllInteractionsComplete();
+                });
+
+                // Record button
+                document.getElementById('record-btn').addEventListener('click', () => {
+                    this.interactions.recorded = true;
+                    this.speak("Recording the current data point.");
+                    this.checkAllInteractionsComplete();
+                });
+
+                // Export button
+                document.getElementById('export-btn').addEventListener('click', () => {
+                    this.interactions.exported = true;
+                    this.speak("Exporting data to PDF.");
+                    this.checkAllInteractionsComplete();
+                });
+
+                // 2D and 3D View Mode Guidance
+                const modeToggles = document.querySelectorAll('.mode-toggle');
+                modeToggles.forEach(toggle => {
+                    toggle.addEventListener('click', () => {
+                        const mode = toggle.dataset.mode;
+                        if (mode === '2d') {
+                            this.interactions.viewed2D = true;
+                            this.speak("Switching to 2D waveform view. Here you can observe the flow pattern in a two-dimensional representation. Use the animation controls to pause or restart the visualization.");
+                        } else if (mode === '3d') {
+                            this.interactions.viewed3D = true;
+                            this.speak("Switching to 3D view. This perspective shows the flow profile in three dimensions. You can rotate the view using the view angle controls to examine the flow from different angles.");
+                        }
+                        this.checkAllInteractionsComplete();
+                    });
+                });
+
+                // 2D View Controls
+                document.getElementById('pause-2d-btn').addEventListener('click', () => {
+                    this.speak("Pausing the 2D flow visualization.");
+                });
+
+                document.getElementById('restart-2d-btn').addEventListener('click', () => {
+                    this.speak("Restarting the 2D flow visualization.");
+                });
+
+                // 3D View Controls
+                const viewButtons = document.querySelectorAll('.view-btn');
+                viewButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const view = button.dataset.view;
+                        switch(view) {
+                            case '3d':
+                                this.speak("Viewing the flow in 3D perspective. This gives you a complete view of the flow profile.");
+                                break;
+                            case 'top':
+                                this.speak("Switching to top view. This shows the flow pattern from above.");
+                                break;
+                            case 'side':
+                                this.speak("Switching to side view. This shows the flow profile from the side.");
+                                break;
+                        }
+                    });
+                });
+
+                // Flow Pattern Information
+                const patternObserver = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.type === 'childList' && mutation.target.id === 'current-pattern') {
+                            const pattern = mutation.target.textContent.trim();
+                            if (pattern !== '-') {
+                                this.speak(`Current flow pattern is ${pattern.toLowerCase()}.`);
+                            }
+                        }
+                    });
+                });
+
+                const patternElement = document.getElementById('current-pattern');
+                if (patternElement) {
+                    patternObserver.observe(patternElement, { childList: true, subtree: true });
+                }
+
+                // Flow Parameters in 3D View
+                const velocityObserver = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.type === 'childList' && mutation.target.id === 'current-velocity') {
+                            const velocity = mutation.target.textContent.trim();
+                            if (velocity !== '0 m/s') {
+                                this.speak(`Current flow velocity is ${velocity}.`);
+                            }
+                        }
+                    });
+                });
+
+                const velocityElement = document.getElementById('current-velocity');
+                if (velocityElement) {
+                    velocityObserver.observe(velocityElement, { childList: true, subtree: true });
+                }
+
+                // Guide through results
+                const resultObserver = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.type === 'childList' && mutation.target.classList.contains('value')) {
+                            const label = mutation.target.previousElementSibling.textContent.trim();
+                            const value = mutation.target.textContent.trim();
+                            if (value !== '-') {
+                                this.speak(`${label} is ${value}`);
+                            }
+                        }
+                    });
+                });
+
+                document.querySelectorAll('.result-display').forEach(result => {
+                    resultObserver.observe(result, { childList: true, subtree: true });
+                });
+            }
+
+            toggleVoice() {
+                this.isEnabled = !this.isEnabled;
+                this.voiceToggle.classList.toggle('active');
+                this.voiceStatus.classList.toggle('active');
+                
+                if (!this.isEnabled) {
+                    this.synth.cancel();
+                    this.voiceText.textContent = "Voice Assistant Disabled";
+                    this.voiceWave.classList.remove('speaking');
+                } else {
+                    this.voiceText.textContent = "Voice Assistant Ready";
+                    this.speak("Voice assistant resumed.");
+                }
+            }
+
+            speak(text) {
+                if (!this.isEnabled) return;
+
+                this.voiceText.textContent = text;
+                this.voiceWave.classList.add('speaking');
+                
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.voice = this.voice;
+                utterance.rate = 0.9; // Slightly slower for better clarity
+                utterance.pitch = 1;
+                
+                utterance.onstart = () => {
+                    this.isSpeaking = true;
+                };
+                
+                utterance.onend = () => {
+                    this.isSpeaking = false;
+                    this.voiceWave.classList.remove('speaking');
+                    this.voiceText.textContent = "Voice Assistant Ready";
+                };
+
+                this.synth.speak(utterance);
+            }
+
+            checkAllInteractionsComplete() {
+                const allComplete = Object.values(this.interactions).every(value => value === true);
+                if (allComplete && !this.thankYouGiven) {
+                    this.thankYouGiven = true;
+                    setTimeout(() => {
+                        this.speak("Thank you for completing the fluid flow simulation experiment. You've successfully explored both 2D and 3D visualizations, calculated Reynolds numbers, and analyzed different flow patterns. Your understanding of fluid dynamics has been enhanced through this interactive experience.");
+                    }, 2000);
+                }
+            }
+        }
+
+        // Initialize voice assistant when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            window.voiceAssistant = new VoiceAssistant();
+        });
     </script>
 </body>
 </html>
