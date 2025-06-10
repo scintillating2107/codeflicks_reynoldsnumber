@@ -1,2 +1,1 @@
-<!-- Aim of the Experiment -->
-<p> To determine the Reynolds number for fluid flow in a pipe or channel and to study the characteristics of different flow regimes, including laminar, transitional, and turbulent flows. This experiment helps in understanding the behavior of fluid under varying flow conditions and the effect of Reynolds number on the nature of the flow.</p>
+### To determine the Reynolds number for fluid flow in a pipe or channel and to study the characteristics of different flow regimes, including laminar, transitional, and turbulent flows. This experiment helps in understanding the behavior of fluid under varying flow conditions and the effect of Reynolds number on the nature of the flow.
