@@ -1,4 +1,3 @@
-### Procedure
 
 1. **Input Pipe Diameter:**
    In the “Input Parameters” section, enter the **pipe diameter** in meters (within the range 0.1–1.0 m).
