@@ -89,7 +89,7 @@
 
 const myQuestions = [
   {
-    question: "1. When the Reynolds number is between 2000 and 4000, the flow is considered:",
+    question: "When the Reynolds number is between 2000 and 4000, the flow is considered:",
     answers: {
       a: "Laminar",
       b: "Turbulent",
@@ -100,7 +100,7 @@ const myQuestions = [
   },
 
   {
-    question: "2. Reynolds number is a dimensionless quantity because:",
+    question: " Reynolds number is a dimensionless quantity because:",
     answers: {
       a: "Its units cancel out during calculation",
       b: "It has no physical meaning",
@@ -111,7 +111,7 @@ const myQuestions = [
   },
 
   {
-    question: "3. What happens to Reynolds number if the velocity of the fluid is doubled (keeping all other parameters constant)?",
+    question: " What happens to Reynolds number if the velocity of the fluid is doubled (keeping all other parameters constant)?",
     answers: {
       a: "It becomes half",
       b: "It remains unchanged",
@@ -122,7 +122,7 @@ const myQuestions = [
   },
 
   {
-    question: "4. Which of the following flow conditions is most likely to cause vibration and noise in pipelines?",
+    question: " Which of the following flow conditions is most likely to cause vibration and noise in pipelines?",
     answers: {
       a: "Laminar flow",
       b: "Turbulent flow",
@@ -133,7 +133,7 @@ const myQuestions = [
   },
 
   {
-    question: "5. Which parameter change is most effective in converting turbulent flow into laminar flow?",
+    question: " Which parameter change is most effective in converting turbulent flow into laminar flow?",
     answers: {
       a: "Increasing velocity",
       b: "Decreasing fluid density",
